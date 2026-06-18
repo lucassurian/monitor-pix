@@ -7,7 +7,7 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
-  const comprovantes = obterComprovantes();
+  const comprovantes = await obterComprovantes();
   return NextResponse.json({ comprovantes });
 }
 
@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
   if (!session) return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
   const body = await request.json();
-
   const { clienteNome, clienteDocumento, valor, dataHora, idTransacaoE2E, observacoes, criadoPor } = body;
 
   if (!clienteNome || !clienteDocumento || !valor || !dataHora) {
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const novoComprovante = adicionarComprovante({
+  const novoComprovante = await adicionarComprovante({
     clienteNome,
     clienteDocumento,
     valor: Number(valor),

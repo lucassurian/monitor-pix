@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Comprovante {
+  id                String   @id @default(cuid())
+  clienteNome       String
+  clienteDocumento  String
+  valor             Float
+  dataHora          DateTime
+  idTransacaoE2E    String?
+  observacoes       String?
+  criadoPor         String
+  criadoEm          DateTime @default(now())
+}
+
+model ConciliacaoLog {
+  id             String   @id @default(cuid())
+  comprovanteId  String
+  lancamentoE2E  String?
+  status         String
+  scoreConfianca Int
+  criadoEm       DateTime @default(now())
+}

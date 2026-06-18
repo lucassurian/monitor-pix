@@ -9,10 +9,8 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
-  const comprovantes = obterComprovantes();
+  const comprovantes = await obterComprovantes();
 
-  // Busca lançamentos dos últimos 7 dias — janela suficiente para cobrir
-  // o atraso típico entre o pagamento e o cadastro do comprovante.
   const dataFim = new Date();
   const dataInicio = new Date();
   dataInicio.setDate(dataInicio.getDate() - 7);

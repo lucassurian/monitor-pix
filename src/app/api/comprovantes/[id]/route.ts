@@ -7,6 +7,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
-  removerComprovante(params.id);
+  await removerComprovante(params.id);
   return NextResponse.json({ ok: true });
 }
