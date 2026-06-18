@@ -54,14 +54,7 @@ export function NovoComprovanteModal({ aberto, onFechar, onSalvar }: NovoComprov
         throw new Error(data.erro || "Não foi possível salvar o comprovante.");
       }
 
-      setForm({
-        clienteNome: "",
-        clienteDocumento: "",
-        valor: "",
-        dataHora: "",
-        idTransacaoE2E: "",
-        observacoes: "",
-      });
+      setForm({ clienteNome: "", clienteDocumento: "", valor: "", dataHora: "", idTransacaoE2E: "", observacoes: "" });
       onSalvar();
       onFechar();
     } catch (err) {
@@ -73,21 +66,21 @@ export function NovoComprovanteModal({ aberto, onFechar, onSalvar }: NovoComprov
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center">
-      <div className="w-full max-w-lg rounded-t-2xl border border-ink-700 bg-ink-900 p-5 sm:rounded-2xl">
+      <div className="w-full max-w-lg rounded-t-2xl border border-gray-200 bg-white p-5 dark:border-ink-700 dark:bg-ink-900 sm:rounded-2xl">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-lg font-semibold text-paper-50">
+          <h2 className="font-display text-lg font-semibold text-ink-950 dark:text-paper-50">
             Novo comprovante
           </h2>
           <button
             onClick={onFechar}
-            className="rounded-full p-1.5 text-paper-100/50 hover:bg-ink-800 hover:text-paper-50"
+            className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:text-paper-100/50 dark:hover:bg-ink-800 dark:hover:text-paper-50"
             aria-label="Fechar"
           >
             <X size={18} />
           </button>
         </div>
 
-        <p className="mb-4 text-sm text-paper-100/50">
+        <p className="mb-4 text-sm text-gray-500 dark:text-paper-100/50">
           Digite os dados do comprovante que o cliente enviou. Vamos cruzar essas informações com os lançamentos recebidos no banco.
         </p>
 
@@ -161,7 +154,7 @@ export function NovoComprovanteModal({ aberto, onFechar, onSalvar }: NovoComprov
             <button
               type="button"
               onClick={onFechar}
-              className="flex-1 rounded-xl border border-ink-700 px-4 py-2.5 text-sm font-medium text-paper-100/70 hover:bg-ink-800"
+              className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:border-ink-700 dark:text-paper-100/70 dark:hover:bg-ink-800"
             >
               Cancelar
             </button>
@@ -180,36 +173,36 @@ export function NovoComprovanteModal({ aberto, onFechar, onSalvar }: NovoComprov
         .campo-input {
           width: 100%;
           border-radius: 0.75rem;
-          border: 1px solid #212b28;
-          background-color: #171f1d;
+          border: 1px solid #e5e7eb;
+          background-color: #f9fafb;
           padding: 0.6rem 0.75rem;
           font-size: 0.875rem;
-          color: #f6f7f4;
+          color: #0B0F0E;
         }
         .campo-input::placeholder {
-          color: rgba(246, 247, 244, 0.3);
+          color: rgba(107, 114, 128, 0.7);
         }
         .campo-input:focus {
           outline: none;
           border-color: #32bcad;
+        }
+        :is(.dark) .campo-input {
+          border-color: #212b28;
+          background-color: #171f1d;
+          color: #f6f7f4;
+        }
+        :is(.dark) .campo-input::placeholder {
+          color: rgba(246, 247, 244, 0.3);
         }
       `}</style>
     </div>
   );
 }
 
-function Campo({
-  label,
-  obrigatorio,
-  children,
-}: {
-  label: string;
-  obrigatorio?: boolean;
-  children: React.ReactNode;
-}) {
+function Campo({ label, obrigatorio, children }: { label: string; obrigatorio?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-paper-100/60">
+      <span className="mb-1 block text-xs font-medium text-gray-600 dark:text-paper-100/60">
         {label} {obrigatorio && <span className="text-coral-500">*</span>}
       </span>
       {children}

@@ -35,10 +35,10 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
   return (
     <div
       className={clsx(
-        "rounded-2xl border bg-ink-900/40 transition-colors",
+        "rounded-2xl border bg-white transition-colors dark:bg-ink-900/40",
         status === "divergente" && "border-coral-500/30",
         status === "pendente" && "border-amber-500/20",
-        status === "conciliado" && "border-ink-700"
+        status === "conciliado" && "border-gray-200 dark:border-ink-700"
       )}
     >
       <button
@@ -48,30 +48,27 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
         <div className="flex min-w-0 flex-1 items-center gap-4">
           <StatusBadge status={status} />
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-paper-50">{comprovante.clienteNome}</p>
-            <p className="text-xs text-paper-100/40">{formatarDataHora(comprovante.dataHora)}</p>
+            <p className="truncate text-sm font-medium text-ink-950 dark:text-paper-50">{comprovante.clienteNome}</p>
+            <p className="text-xs text-gray-400 dark:text-paper-100/40">{formatarDataHora(comprovante.dataHora)}</p>
           </div>
         </div>
         <div className="flex items-center gap-3 whitespace-nowrap">
-          <span className="font-mono text-sm font-medium text-paper-50">
+          <span className="font-mono text-sm font-medium text-ink-950 dark:text-paper-50">
             {formatarMoeda(comprovante.valor)}
           </span>
           <ChevronDown
             size={16}
-            className={clsx(
-              "text-paper-100/40 transition-transform",
-              expandido && "rotate-180"
-            )}
+            className={clsx("text-gray-400 transition-transform dark:text-paper-100/40", expandido && "rotate-180")}
           />
         </div>
       </button>
 
       {expandido && (
-        <div className="border-t border-ink-700 px-4 pb-4 pt-3">
+        <div className="border-t border-gray-200 px-4 pb-4 pt-3 dark:border-ink-700">
           <div className="grid gap-3 sm:grid-cols-[1fr_auto_1fr]">
             {/* Lado do comprovante */}
-            <div className="rounded-xl bg-ink-800/60 p-3">
-              <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-paper-100/50">
+            <div className="rounded-xl bg-gray-50 p-3 dark:bg-ink-800/60">
+              <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-paper-100/50">
                 <FileText size={12} />
                 COMPROVANTE INFORMADO
               </div>
@@ -86,12 +83,12 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
             </div>
 
             <div className="hidden items-center justify-center sm:flex">
-              <ArrowRight size={16} className="text-paper-100/30" />
+              <ArrowRight size={16} className="text-gray-300 dark:text-paper-100/30" />
             </div>
 
             {/* Lado do lançamento bancário */}
-            <div className="rounded-xl bg-ink-800/60 p-3">
-              <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-paper-100/50">
+            <div className="rounded-xl bg-gray-50 p-3 dark:bg-ink-800/60">
+              <div className="mb-2 flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-paper-100/50">
                 <Landmark size={12} />
                 LANÇAMENTO NO BANCO
               </div>
@@ -105,7 +102,7 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
                   <Linha label="Conta" valor={lancamento.contaDestino} />
                 </dl>
               ) : (
-                <p className="text-xs italic text-paper-100/40">
+                <p className="text-xs italic text-gray-400 dark:text-paper-100/40">
                   Ainda não encontramos um lançamento correspondente no banco.
                 </p>
               )}
@@ -113,9 +110,9 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
           </div>
 
           {motivosDivergencia.length > 0 && (
-            <div className="mt-3 rounded-xl bg-ink-800/40 p-3">
-              <p className="mb-1 text-xs font-medium text-paper-100/50">Observações da conciliação</p>
-              <ul className="space-y-1 text-xs text-paper-100/70">
+            <div className="mt-3 rounded-xl bg-gray-50 p-3 dark:bg-ink-800/40">
+              <p className="mb-1 text-xs font-medium text-gray-500 dark:text-paper-100/50">Observações da conciliação</p>
+              <ul className="space-y-1 text-xs text-gray-600 dark:text-paper-100/70">
                 {motivosDivergencia.map((motivo, i) => (
                   <li key={i}>• {motivo}</li>
                 ))}
@@ -123,7 +120,7 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
             </div>
           )}
 
-          <div className="mt-3 flex items-center justify-between text-xs text-paper-100/40">
+          <div className="mt-3 flex items-center justify-between text-xs text-gray-400 dark:text-paper-100/40">
             <span>Confiança do match: {scoreConfianca}%</span>
             {comprovante.observacoes && <span className="italic">"{comprovante.observacoes}"</span>}
           </div>
@@ -136,8 +133,8 @@ export function ConciliacaoCard({ conciliacao }: { conciliacao: Conciliacao }) {
 function Linha({ label, valor, mono }: { label: string; valor: string; mono?: boolean }) {
   return (
     <div className="flex items-baseline justify-between gap-2">
-      <dt className="text-paper-100/40">{label}</dt>
-      <dd className={clsx("truncate text-right text-paper-50", mono && "font-mono")}>{valor}</dd>
+      <dt className="text-gray-400 dark:text-paper-100/40">{label}</dt>
+      <dd className={clsx("truncate text-right text-ink-950 dark:text-paper-50", mono && "font-mono")}>{valor}</dd>
     </div>
   );
 }

@@ -27,13 +27,16 @@ export default function MonitorPixPage() {
 
   useEffect(() => {
     const saved = localStorage.getItem("login-theme");
-    setDark(saved !== "light");
+    const isDark = saved !== "light";
+    setDark(isDark);
+    document.documentElement.classList.toggle("dark", isDark);
   }, []);
 
   function toggleTheme() {
     const next = !dark;
     setDark(next);
     localStorage.setItem("login-theme", next ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", next);
   }
 
   const carregarDados = useCallback(async () => {
@@ -71,20 +74,20 @@ export default function MonitorPixPage() {
   });
 
   return (
-    <main className="min-h-screen bg-ink-950 pb-16">
+    <main className="min-h-screen bg-paper-50 pb-16 dark:bg-ink-950 transition-colors duration-200">
       {/* Header */}
-      <header className="border-b border-ink-700 bg-ink-900/40">
+      <header className="border-b border-gray-200 bg-white/80 dark:border-ink-700 dark:bg-ink-900/40">
         <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-pix-500/15">
-                <Activity size={18} className="text-pix-400" />
+                <Activity size={18} className="text-pix-500 dark:text-pix-400" />
               </div>
               <div>
-                <h1 className="font-display text-lg font-semibold leading-tight text-paper-50">
+                <h1 className="font-display text-lg font-semibold leading-tight text-ink-950 dark:text-paper-50">
                   Monitor Pix
                 </h1>
-                <p className="text-xs text-paper-100/40">Conciliação bancária automática</p>
+                <p className="text-xs text-ink-700/50 dark:text-paper-100/40">Conciliação bancária automática</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -97,14 +100,14 @@ export default function MonitorPixPage() {
               </button>
               <button
                 onClick={toggleTheme}
-                className="flex items-center gap-1.5 rounded-xl border border-ink-700 px-3 py-2 text-sm text-paper-100/50 hover:bg-ink-800 hover:text-paper-50"
+                className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:border-ink-700 dark:text-paper-100/50 dark:hover:bg-ink-800 dark:hover:text-paper-50"
                 title={dark ? "Modo claro" : "Modo escuro"}
               >
                 {dark ? <Sun size={14} /> : <Moon size={14} />}
               </button>
               <button
                 onClick={() => signOut({ callbackUrl: "/login" })}
-                className="flex items-center gap-1.5 rounded-xl border border-ink-700 px-3 py-2 text-sm text-paper-100/50 hover:bg-ink-800 hover:text-paper-50"
+                className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:border-ink-700 dark:text-paper-100/50 dark:hover:bg-ink-800 dark:hover:text-paper-50"
                 title="Sair"
               >
                 <LogOut size={14} />
@@ -118,62 +121,33 @@ export default function MonitorPixPage() {
         {/* Métricas */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <MetricCard label="Total" value={resumo?.total ?? "—"} icon={Activity} />
-          <MetricCard
-            label="Conciliados"
-            value={resumo?.conciliados ?? "—"}
-            icon={CheckCircle2}
-            tone="pix"
-          />
+          <MetricCard label="Conciliados" value={resumo?.conciliados ?? "—"} icon={CheckCircle2} tone="pix" />
           <MetricCard label="Pendentes" value={resumo?.pendentes ?? "—"} icon={Clock} tone="amber" />
-          <MetricCard
-            label="Divergentes"
-            value={resumo?.divergentes ?? "—"}
-            icon={AlertTriangle}
-            tone="coral"
-          />
+          <MetricCard label="Divergentes" value={resumo?.divergentes ?? "—"} icon={AlertTriangle} tone="coral" />
         </div>
 
-        {/* Barra de ações: busca, filtro, atualizar */}
+        {/* Barra de ações */}
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 overflow-x-auto">
-            <FiltroBotao
-              ativo={filtroStatus === "todos"}
-              onClick={() => setFiltroStatus("todos")}
-              label="Todos"
-            />
-            <FiltroBotao
-              ativo={filtroStatus === "conciliado"}
-              onClick={() => setFiltroStatus("conciliado")}
-              label="Conciliados"
-            />
-            <FiltroBotao
-              ativo={filtroStatus === "pendente"}
-              onClick={() => setFiltroStatus("pendente")}
-              label="Pendentes"
-            />
-            <FiltroBotao
-              ativo={filtroStatus === "divergente"}
-              onClick={() => setFiltroStatus("divergente")}
-              label="Divergentes"
-            />
+            <FiltroBotao ativo={filtroStatus === "todos"} onClick={() => setFiltroStatus("todos")} label="Todos" />
+            <FiltroBotao ativo={filtroStatus === "conciliado"} onClick={() => setFiltroStatus("conciliado")} label="Conciliados" />
+            <FiltroBotao ativo={filtroStatus === "pendente"} onClick={() => setFiltroStatus("pendente")} label="Pendentes" />
+            <FiltroBotao ativo={filtroStatus === "divergente"} onClick={() => setFiltroStatus("divergente")} label="Divergentes" />
           </div>
 
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
-              <Search
-                size={14}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-paper-100/30"
-              />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-paper-100/30" />
               <input
                 value={busca}
                 onChange={(e) => setBusca(e.target.value)}
                 placeholder="Buscar por nome, CPF ou ID..."
-                className="w-full rounded-xl border border-ink-700 bg-ink-900/60 py-2 pl-8 pr-3 text-sm text-paper-50 placeholder:text-paper-100/30 focus:border-pix-500 focus:outline-none sm:w-56"
+                className="w-full rounded-xl border border-gray-200 bg-white py-2 pl-8 pr-3 text-sm text-ink-950 placeholder:text-gray-400 focus:border-pix-500 focus:outline-none dark:border-ink-700 dark:bg-ink-900/60 dark:text-paper-50 dark:placeholder:text-paper-100/30 sm:w-56"
               />
             </div>
             <button
               onClick={carregarDados}
-              className="flex items-center gap-1.5 rounded-xl border border-ink-700 px-3 py-2 text-sm text-paper-100/60 hover:bg-ink-800 hover:text-paper-50"
+              className="flex items-center gap-1.5 rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:border-ink-700 dark:text-paper-100/60 dark:hover:bg-ink-800 dark:hover:text-paper-50"
               title="Atualizar dados do banco"
             >
               <RefreshCw size={14} className={carregando ? "animate-spin" : ""} />
@@ -182,7 +156,7 @@ export default function MonitorPixPage() {
         </div>
 
         {ultimaAtualizacao && (
-          <p className="mt-2 text-xs text-paper-100/30">
+          <p className="mt-2 text-xs text-gray-400 dark:text-paper-100/30">
             Última sincronização com o banco: {ultimaAtualizacao.toLocaleTimeString("pt-BR")}
           </p>
         )}
@@ -190,17 +164,15 @@ export default function MonitorPixPage() {
         {/* Lista de conciliações */}
         <div className="mt-4 space-y-2">
           {carregando && conciliacoes.length === 0 && (
-            <div className="rounded-2xl border border-ink-700 bg-ink-900/40 p-8 text-center text-sm text-paper-100/40">
+            <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-400 dark:border-ink-700 dark:bg-ink-900/40 dark:text-paper-100/40">
               Buscando lançamentos no banco e comparando com os comprovantes...
             </div>
           )}
-
           {!carregando && conciliacoesFiltradas.length === 0 && (
-            <div className="rounded-2xl border border-ink-700 bg-ink-900/40 p-8 text-center text-sm text-paper-100/40">
+            <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-400 dark:border-ink-700 dark:bg-ink-900/40 dark:text-paper-100/40">
               Nenhuma conciliação encontrada com esses filtros.
             </div>
           )}
-
           {conciliacoesFiltradas.map((c) => (
             <ConciliacaoCard key={c.id} conciliacao={c} />
           ))}
@@ -216,22 +188,14 @@ export default function MonitorPixPage() {
   );
 }
 
-function FiltroBotao({
-  ativo,
-  onClick,
-  label,
-}: {
-  ativo: boolean;
-  onClick: () => void;
-  label: string;
-}) {
+function FiltroBotao({ ativo, onClick, label }: { ativo: boolean; onClick: () => void; label: string }) {
   return (
     <button
       onClick={onClick}
       className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
         ativo
-          ? "bg-paper-50 text-ink-950"
-          : "bg-ink-900/60 text-paper-100/50 hover:bg-ink-800 hover:text-paper-50"
+          ? "bg-ink-950 text-paper-50 dark:bg-paper-50 dark:text-ink-950"
+          : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:bg-ink-900/60 dark:text-paper-100/50 dark:hover:bg-ink-800 dark:hover:text-paper-50"
       }`}
     >
       {label}
