@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { signOut } from "next-auth/react";
-import { Plus, RefreshCw, Activity, CheckCircle2, Clock, AlertTriangle, Search, LogOut } from "lucide-react";
+import { Plus, RefreshCw, Activity, CheckCircle2, Clock, AlertTriangle, Search, LogOut, Sun, Moon } from "lucide-react";
 import type { Conciliacao, StatusConciliacao } from "@/types/domain";
 import { MetricCard } from "@/components/MetricCard";
 import { ConciliacaoCard } from "@/components/ConciliacaoCard";
@@ -23,14 +23,30 @@ export default function MonitorPixPage() {
   const [filtroStatus, setFiltroStatus] = useState<StatusConciliacao | "todos">("todos");
   const [busca, setBusca] = useState("");
   const [ultimaAtualizacao, setUltimaAtualizacao] = useState<Date | null>(null);
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("login-theme");
+    setDark(saved !== "light");
+  }, []);
+
+  function toggleTheme() {
+    const next = !dark;
+    setDark(next);
+    localStorage.setItem("login-theme", next ? "dark" : "light");
+  }
 
   const carregarDados = useCallback(async () => {
     setCarregando(true);
     try {
       const resposta = await fetch("/api/conciliacoes");
+      if (resposta.status === 401) {
+        window.location.href = "/login";
+        return;
+      }
       const data = await resposta.json();
-      setConciliacoes(data.conciliacoes);
-      setResumo(data.resumo);
+      setConciliacoes(data.conciliacoes ?? []);
+      setResumo(data.resumo ?? null);
       setUltimaAtualizacao(new Date());
     } finally {
       setCarregando(false);
@@ -78,6 +94,13 @@ export default function MonitorPixPage() {
               >
                 <Plus size={16} />
                 <span className="hidden sm:inline">Novo comprovante</span>
+              </button>
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-1.5 rounded-xl border border-ink-700 px-3 py-2 text-sm text-paper-100/50 hover:bg-ink-800 hover:text-paper-50"
+                title={dark ? "Modo claro" : "Modo escuro"}
+              >
+                {dark ? <Sun size={14} /> : <Moon size={14} />}
               </button>
               <button
                 onClick={() => signOut({ callbackUrl: "/login" })}
