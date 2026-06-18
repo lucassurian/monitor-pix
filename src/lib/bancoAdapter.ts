@@ -62,7 +62,7 @@ function gerarIdE2EFicticio(seed: number, data: Date): string {
 function gerarLancamentosFicticios(params: BuscarLancamentosParams): LancamentoBancario[] {
   const inicio = new Date(params.dataInicio).getTime();
   const fim = new Date(params.dataFim).getTime();
-  const quantidade = 9;
+  const quantidade = 9 as number;
   const lancamentos: LancamentoBancario[] = [];
 
   for (let i = 0; i < quantidade; i++) {
