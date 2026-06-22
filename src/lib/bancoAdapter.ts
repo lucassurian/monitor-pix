@@ -96,8 +96,14 @@ export const bancoMockAdapter: BancoAdapter = {
 
 // ---------------------------------------------------------------------
 // Ponto único de obtenção do adapter ativo.
-// Quando a API real estiver pronta, troque a constante abaixo.
+// Retorna o adapter real quando BANCO_CLIENT_ID estiver definido,
+// caso contrário usa o mock (desenvolvimento / sem credenciais).
 // ---------------------------------------------------------------------
 export function obterBancoAdapter(): BancoAdapter {
+  if (process.env.BANCO_CLIENT_ID) {
+    // Importação dinâmica para não carregar fs/https no bundle do cliente
+    const { bancoItauAdapter } = require("./bancoAdapterItau");
+    return bancoItauAdapter;
+  }
   return bancoMockAdapter;
 }
